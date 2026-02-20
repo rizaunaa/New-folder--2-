@@ -32,9 +32,11 @@ jobs:
           pip install buildozer cython==0.29.36
 
       - name: Build APK
+        env:
+          JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
+          PATH: /usr/lib/jvm/temurin-17-jdk-amd64/bin:${{ env.PATH }}
         run: |
-          export JAVA_HOME="$JAVA_HOME_17_X64"
-          export PATH="$JAVA_HOME/bin:$PATH"
+          echo "JAVA_HOME=$JAVA_HOME"
           java -version
           . .venv/bin/activate
           yes | buildozer android debug
