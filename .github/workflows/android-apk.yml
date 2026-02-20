@@ -19,6 +19,14 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Force Java 17 Globally
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> "$GITHUB_ENV"
+          echo "PATH=$JAVA_HOME_17_X64/bin:$PATH" >> "$GITHUB_ENV"
+          echo "GRADLE_OPTS=-Dorg.gradle.java.home=$JAVA_HOME_17_X64" >> "$GITHUB_ENV"
+          echo "Using JAVA_HOME=$JAVA_HOME_17_X64"
+          "$JAVA_HOME_17_X64/bin/java" -version
+
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -32,9 +40,6 @@ jobs:
           pip install buildozer cython==0.29.36
 
       - name: Build APK
-        env:
-          JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
-          PATH: /usr/lib/jvm/temurin-17-jdk-amd64/bin:${{ env.PATH }}
         run: |
           echo "JAVA_HOME=$JAVA_HOME"
           java -version
