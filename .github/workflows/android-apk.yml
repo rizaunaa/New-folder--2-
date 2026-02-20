@@ -53,6 +53,25 @@ jobs:
           path: buildozer.log
           if-no-files-found: warn
 
+      - name: Create Failure Summary
+        if: failure()
+        run: |
+          {
+            echo "===== LAST 300 LINES ====="
+            tail -n 300 buildozer.log || true
+            echo
+            echo "===== ERROR/TRACEBACK HITS ====="
+            grep -nE "error|failed|traceback|exception|No such file|not found|command failed" buildozer.log | tail -n 400 || true
+          } > buildozer-summary.log
+
+      - name: Upload Failure Summary
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buildozer-summary
+          path: buildozer-summary.log
+          if-no-files-found: warn
+
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
